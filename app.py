@@ -1,5 +1,4 @@
 import streamlit as st
-import ollama
 import os
 from rag import load_pdf, create_db, search
 
@@ -119,11 +118,8 @@ elif page == "📄 Upload & Chat":
 
         if query:
             # Example context (replace with your RAG logic)
-            context = "Sample context from PDF"
-
-            import ollama
-
-            response = ollama.chat(
+            context = "Sample context from PDF"   
+            response=ollama.chat(    
                 model="phi",
                 messages=[{
                     "role": "user",

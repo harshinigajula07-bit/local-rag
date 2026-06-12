@@ -1,7 +1,8 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
 
 # Load PDF
 def load_pdf(file_path):
@@ -13,15 +14,32 @@ def load_pdf(file_path):
         chunk_overlap=50
     )
 
-    return splitter.split_documents(pages)
+    docs = splitter.split_documents(pages)
+    return docs
 
-# Create Vector DB
+
+# Create Vector Database
 def create_db(docs):
-    embeddings = OllamaEmbeddings(model="nomic-embed-text")
-    db = Chroma.from_documents(docs, embeddings, persist_directory="vectorstore")
-    db.persist()
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/all-MiniLM-L6-v2"
+    )
+
+    db = Chroma.from_documents(
+        documents=docs,
+        embedding=embeddings,
+        persist_directory="vectorstore"
+    )
+
     return db
 
-# Search relevant text
+
+# Search Relevant Documents
 def search(db, query):
-    return db.similarity_search(query, k=3)
+
+    results = db.similarity_search(
+        query,
+        k=3
+    )
+
+    return results
