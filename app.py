@@ -1,6 +1,11 @@
 import streamlit as st
 import ollama
+import os
 from rag import load_pdf, create_db, search
+
+
+os.makedirs("uploads", exist_ok=True)
+os.makedirs("vectorstore", exist_ok=True)
 
 st.title("🩺 AI Healthcare Assistant")
 
