@@ -6,48 +6,6 @@ from rag import load_pdf, create_db, search
 os.makedirs("uploads", exist_ok=True)
 os.makedirs("vectorstore", exist_ok=True)
 
-st.title("🩺 AI Healthcare Assistant")
-
-uploaded_file = st.file_uploader("Upload PDF")
-
-if uploaded_file:
-    path = f"uploads/{uploaded_file.name}"
-
-    with open(path, "wb") as f:
-        f.write(uploaded_file.read())
-
-    docs = load_pdf(path)
-    db = create_db(docs)
-
-    query = st.text_input("Ask a question")
-
-    if query:
-        docs = search(db, query)
-        context = " ".join([d.page_content for d in docs])
-
-        response = ollama.chat(
-            model="phi",
-            messages=[{
-                "role": "user",
-                "content": f"""
-        You are a helpful AI assistant.
-
-        IMPORTANT RULE:
-        - Always answer ONLY in {st.session_state.language}
-        - Do NOT respond in English unless language is English
-        - Keep answers simple and clear
-
-        Context:
-        {context}
-
-        Question:
-        {query}
-        """
-            }]
-        )
-
-        st.write("### Answer")
-        st.write(response["message"]["content"])
 import streamlit as st
 
 st.set_page_config(
@@ -133,18 +91,8 @@ Question: {query}
                 }]
             )
 
-            st.write("### Answer")
+            st.write("### Answer")   
             st.write(response["message"]["content"])
-if page == "🏠 Home":
-    st.title("🩺 AI Healthcare Assistant")
-    st.write("""
-    Welcome! This app helps you:
-    - Upload medical PDFs 📄
-    - Ask questions 🤖
-    - Get AI answers using Ollama 🧠
-    - Switch languages 🌍
-    - Choose AI mode ⚙️
-    """)
 elif page == "📚 About Project":
     st.title("📚 About This Project")
 
@@ -199,5 +147,4 @@ Question:
                 }]
             )
 
-            st.write("### Answer")
-            st.write(response["message"]["content"])
+             
