@@ -1,150 +1,41 @@
 import streamlit as st
-import os
-from rag import load_pdf, create_db, search
 
+from translations.en import translations as en
+from translations.te import translations as te
+from translations.hi import translations as hi
 
-os.makedirs("uploads", exist_ok=True)
-os.makedirs("vectorstore", exist_ok=True)
-
-import streamlit as st
-
-st.set_page_config(
-    page_title="AI Healthcare Assistant",
-    page_icon="🩺",
-    layout="wide"
+# Language selector
+language = st.sidebar.selectbox(
+    "Choose Language",
+    ["English", "Telugu", "Hindi"]
 )
 
-# ---------------- SESSION STATE ----------------
-if "language" not in st.session_state:
-    st.session_state.language = "English"
+if language == "English":
+    t = en
+elif language == "Telugu":
+    t = te
+else:
+    t = hi
 
-if "mode" not in st.session_state:
-    st.session_state.mode = "Local (Ollama)"
+# Title
+st.title(t["title"])
 
-# ---------------- SIDEBAR NAVIGATION ----------------
-st.sidebar.title("🧠 AI Assistant Menu")
-
-page = st.sidebar.radio(
-    "Navigate",
-    [
-        "🏠 Home",
-        "📄 Upload & Chat",
-        "🤖 AI Mode",
-        "🌐 Language Settings",
-        "📚 About Project"
-    ]
+# Upload PDF
+uploaded_file = st.file_uploader(
+    t["upload"],
+    type=["pdf"],
+    key="upload1"
 )
 
-st.sidebar.markdown("---")
-st.sidebar.info("Built with Streamlit + Ollama + RAG 🧠")
-if page == "🌐 Language Settings":
-    st.title("🌍 Language Settings")
+# Ask question
+question = st.text_input(
+    t["question"],
+    key="q1"
+)
 
-    st.session_state.language = st.selectbox(
-        "Choose your language",
-        [
-            "English",
-            "Hindi",
-            "Telugu",
-            "Tamil",
-            "Kannada",
-            "French",
-            "Spanish"
-        ]
-    )
+# Display results
+if uploaded_file:
+    st.success("PDF uploaded successfully!")
 
-    st.success(f"Selected Language: {st.session_state.language}")
-    st.info("AI will respond in this language (if supported by model).")
-elif page == "🤖 AI Mode":
-    st.title("🤖 AI Mode Selection")
-
-    st.session_state.mode = st.radio(
-        "Choose AI Mode",
-        ["Local (Ollama)", "Cloud (BYOK)"]
-    )
-
-    st.success(f"Current Mode: {st.session_state.mode}")
-elif page == "📄 Upload & Chat":
-    st.title("📄 Chat with Documents")
-
-    uploaded_file = st.file_uploader("Upload your PDF")
-
-    if uploaded_file:
-        st.success("File uploaded successfully!")
-
-        query = st.text_input("Ask a question")
-
-        if query:
-            # Example context (replace with your RAG logic)
-            context = "Sample context from PDF"   
-            response=ollama.chat(    
-                model="phi",
-                messages=[{
-                    "role": "user",
-                    "content": f"""
-Answer in {st.session_state.language}.
-
-Context: {context}
-
-Question: {query}
-"""
-                }]
-            )
-
-            st.write("### Answer")   
-            st.write(response["message"]["content"])
-elif page == "📚 About Project":
-    st.title("📚 About This Project")
-
-    st.write("""
-    This is a RAG-based AI system built using:
-
-    - Streamlit (UI)
-    - Ollama (Local AI)
-    - ChromaDB (Vector Database)
-    - LangChain (RAG pipeline)
-
-    Features:
-    ✔ PDF Q&A  
-    ✔ Multilingual responses  
-    ✔ Local + Cloud AI support  
-    """)
-
-elif page == "📄 Upload & Chat":
-    st.title("📄 Chat with Documents")
-
-    uploaded_file = st.file_uploader("Upload PDF")
-
-    if uploaded_file:
-        path = f"uploads/{uploaded_file.name}"
-
-        with open(path, "wb") as f:
-            f.write(uploaded_file.read())
-
-        docs = load_pdf(path)
-        db = create_db(docs)
-
-        query = st.text_input("Ask a question")
-
-        if query:
-            docs = search(db, query)
-
-            context = " ".join([d.page_content for d in docs])
-
-            response = ollama.chat(
-                model="phi",
-                messages=[{
-                    "role": "user",
-                    "content": f"""
-Always answer in {st.session_state.language}.
-
-Context:
-{context}
-
-Question:
-{query}
-"""
-                }]
-            )
-
-             
+if question:
+    st.write("Question:", question)
