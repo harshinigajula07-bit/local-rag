@@ -1,0 +1,5 @@
+```text
+venv/
+.streamlit/
+__pycache__/
+
