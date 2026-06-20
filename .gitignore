@@ -1,5 +1,15 @@
+<<<<<<< HEAD
 ```text
 venv/
 .streamlit/
 __pycache__/
 
+=======
+venv/
+__pycache__/
+*.pyc
+uploads/
+vectorstore/
+.env
+>>>>>>> a91d2ec9aa862b9f33df52a9627634531a132835
+models/
