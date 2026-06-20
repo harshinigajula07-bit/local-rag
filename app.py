@@ -59,25 +59,9 @@ Answer:
     st.write(answer)
 import streamlit as st
 
-# Set up the title of the app
-st.title("PDF Question Answering App")
+st.title("Local RAG Test")
 
-# 1. Create the file uploader widget specifically for PDFs
-uploaded_file = st.file_uploader("Upload your PDF file", type=["pdf"])
+question = st.text_input("Ask a question")
 
-# Check if a file has been uploaded
-if uploaded_file is not None:
-    # Success message showing the file name
-    st.success(f"Successfully uploaded: {uploaded_file.name}")
-    
-# 2. The single question and submit layout at the bottom
-user_question = st.text_input("Ask a question", key="pdf_user_question")
-
-if st.button("Submit", key="pdf_submit_button"):
-    if uploaded_file is not None and user_question:
-        st.write(f"Processing your question: '{user_question}' based on {uploaded_file.name}...")
-        # Your PDF processing / AI RAG model logic will go here
-    elif uploaded_file is None:
-        st.warning("Please upload a PDF file first!")
-    else:
-        st.warning("Please enter a question before submitting.")
+if st.button("Submit"):
+    st.write("You asked:", question)
