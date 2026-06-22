@@ -1,10 +1,11 @@
 import streamlit as st
 
-st.title("Deployment Test")
+st.title("PDF Upload Test")
 
-st.success("Streamlit Cloud is working!")
+uploaded_file = st.file_uploader(
+    "Upload a PDF",
+    type=["pdf"]
+)
 
-question = st.text_input("Ask a question")
-
-if st.button("Submit"):
-    st.write("You asked:", question)
+if uploaded_file is not None:
+    st.success(f"Uploaded: {uploaded_file.name}")
