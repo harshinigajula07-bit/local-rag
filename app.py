@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.title("PDF Upload Test")
+st.title("Local RAG - PDF Question Answering System")
 
 uploaded_file = st.file_uploader(
     "Upload a PDF",
