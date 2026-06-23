@@ -1,99 +1,158 @@
-# 🩺 AI Healthcare Assistant
+# Local RAG - Document Question Answering System
 
-An AI-powered Healthcare Information Assistant built using **Streamlit**, **LangChain**, **ChromaDB**, and **Ollama**. The application allows users to upload PDF documents, ask questions, and receive context-aware answers using Retrieval-Augmented Generation (RAG).
+## Overview
 
----
+Local RAG (Retrieval-Augmented Generation) is a document-based Question Answering system that allows users to upload documents and ask questions about their content. The system extracts text from documents, retrieves the most relevant information, and generates answers using a lightweight local language model.
 
-## 🚀 Features
-
-- 📄 Upload healthcare-related PDF documents
-- 🤖 Ask questions about uploaded documents
-- 🧠 Local AI Inference using Ollama
-- 🔍 Semantic Search with ChromaDB
-- 🌐 Multilingual Response Support
-- 🔑 Ready for BYOK (Bring Your Own Key) integration
-- 💻 Interactive Streamlit Web Interface
+This project follows a local-first approach, ensuring that document processing and question answering can be performed without relying on external cloud services.
 
 ---
 
-## 🏗️ Tech Stack
+## Features
 
-- **Frontend:** Streamlit
-- **Backend:** Python
-- **AI Framework:** LangChain
-- **Vector Database:** ChromaDB
-- **Document Processing:** PyPDF
-- **Local LLM:** Ollama (Phi, Llama, Mistral)
-- **Embeddings:** Nomic Embed Text
+- Upload PDF documents
+- Extract text from documents
+- Create document embeddings
+- Store embeddings in a FAISS vector database
+- Retrieve relevant document chunks
+- Generate answers using a local LLM (TinyLlama via Llama.cpp)
+- Simple Streamlit-based user interface
+- Privacy-friendly local processing
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
+
+### Frontend
+- Streamlit
+
+### Document Processing
+- PyMuPDF (fitz)
+
+### Embeddings
+- Sentence Transformers
+- all-MiniLM-L6-v2
+
+### Vector Database
+- FAISS
+
+### Language Model
+- TinyLlama
+- Llama.cpp
+
+### Programming Language
+- Python
+
+---
+
+## Project Structure
 
 ```text
-ai-healthcare-assistant/
+local-rag/
 │
 ├── app.py
+├── ingest.py
 ├── rag.py
-├── uploads/
-├── vectorstore/
+├── rag_chat.py
 ├── requirements.txt
 ├── README.md
-└── .gitignore
+│
+├── data/
+│   ├── sample.pdf
+│   └── extracted.md
+│
+├── vectorstore/
+│   ├── docs.index
+│   └── chunks.pkl
+│
+├── models/
+│   └── TinyLlama-1.1B-Chat-v1.0.Q4_K_M.gguf
+│
+└── translations/
+    ├── en.py
+    ├── hi.py
+    └── te.py
 ```
 
 ---
 
-## ⚙️ Installation
+## Installation
 
-### 1. Clone the Repository
+### Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ai-healthcare-assistant.git
-cd ai-healthcare-assistant
+git clone https://github.com/harshinigajula07-bit/local-rag.git
+cd local-rag
 ```
 
-### 2. Create Virtual Environment
+### Create Virtual Environment
 
 ```bash
-python3 -m venv venv
+python -m venv venv
+```
+
+### Activate Virtual Environment
+
+Linux/Mac:
+
+```bash
 source venv/bin/activate
 ```
 
-### 3. Install Dependencies
+Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Install Ollama
+---
 
-Download and install Ollama:
+## Download TinyLlama Model
 
-https://ollama.com/download
+Download:
 
-Verify installation:
-
-```bash
-ollama --version
+```text
+TinyLlama-1.1B-Chat-v1.0.Q4_K_M.gguf
 ```
 
-### 5. Pull Required Models
+Place it inside:
 
-```bash
-ollama pull phi
-ollama pull nomic-embed-text
+```text
+models/
 ```
 
 ---
 
-## ▶️ Run the Application
+## Build the Vector Store
+
+Run:
+
+```bash
+python ingest.py
+```
+
+This will:
+
+1. Extract text from PDF files
+2. Split text into chunks
+3. Generate embeddings
+4. Store vectors in FAISS
+
+---
+
+## Run the Application
 
 ```bash
 streamlit run app.py
 ```
 
-Open in browser:
+Open:
 
 ```text
 http://localhost:8501
@@ -101,37 +160,58 @@ http://localhost:8501
 
 ---
 
-## 🔄 Workflow
+## Workflow
 
-1. Upload a PDF document.
-2. The document is split into chunks.
-3. Chunks are converted into embeddings.
-4. Embeddings are stored in ChromaDB.
-5. User asks a question.
-6. Relevant information is retrieved.
-7. Ollama generates an answer using the retrieved context.
-
----
-
-## 🌟 Future Enhancements
-
-- Voice Input and Output
-- Chat History
-- Multiple PDF Support
-- Cloud Deployment
-- BYOK Support (OpenAI, Gemini, Claude)
-- Enhanced Multilingual Support
+1. Upload a PDF document
+2. Extract document text
+3. Generate embeddings
+4. Store vectors in FAISS
+5. Ask a question
+6. Retrieve relevant document chunks
+7. Generate an answer using TinyLlama
+8. Display the response
 
 ---
 
-## 🎯 Objective
+## Example Questions
 
-To provide an AI-powered healthcare information assistant that combines document retrieval and local language models for secure, efficient, and intelligent document-based question answering.
+- What is the main topic of this document?
+- Summarize the uploaded PDF.
+- What are the key findings?
+- Explain the methodology discussed.
 
 ---
 
-## 👩‍💻 Author
+## Advantages
+
+- Local-first architecture
+- Privacy-preserving
+- No dependency on external APIs
+- Lightweight and cost-effective
+- Fast retrieval using FAISS
+
+---
+
+## Future Enhancements
+
+- Multi-document support
+- OCR for scanned PDFs
+- Chat history
+- Multilingual question answering
+- Improved retrieval ranking
+- Support for larger language models
+
+---
+
+## Author
 
 **Harshini Gajula**
 
-Built as a RAG-based AI application using Streamlit and Ollama.
+GitHub:
+https://github.com/harshinigajula07-bit
+
+---
+
+## License
+
+This project is developed for educational and research purposes.
