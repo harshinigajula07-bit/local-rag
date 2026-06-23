@@ -125,4 +125,4 @@ xxhash==3.7.0
 yarl==1.24.2
 zstandard==0.25.0
 streamlit
-PyMuPDF
+pymupdf
