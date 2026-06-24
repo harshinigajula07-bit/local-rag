@@ -1,19 +1,46 @@
 stages:
   - test
+  - security
 
-test:
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+    - .venv/
+
+before_script:
+  # Ensure Python virtual environment is set up locally for the runner
+  - python3 -m venv .venv
+  - source .venv/bin/activate
+  - pip install --upgrade pip
+  - pip install uv vulture bandit ruff pytest  # Pre-installs required tools
+
+# 1. Quality & Pre-Commit Stages (Linting, Formatting, Type Checking, Unit Tests)
+compliance_checks:
   stage: test
-  image: python:3.11
-
-  before_script:
-    - pip install -r requirements.txt
-    - pip install ruff black mypy pytest vulture bandit pip-audit
-
+  tags:
+    - local
   script:
-    - ruff check .
-    - black --check .
-    - mypy .
-    - pytest
-    - vulture app.py ingest.py rag_chat.py query_cli.py
-    - bandit app.py ingest.py rag_chat.py query_cli.py
-    - pip-audit
+    - ruff check .          # Linting
+    - ruff format --check . # Formatting
+    - mypy .                # Type checking
+    - pytest                # Unit tests
+
+# 2. Dead Code Check (Vulture)
+dead_code:
+  stage: test
+  tags:
+    - local
+  script:
+    - vulture . --min-confidence 80
+
+# 3. Security & Package Audits (Bandit & UV Audit)
+security_compliance:
+  stage: security
+  tags:
+    - local
+  script:
+    - bandit -r .          # Security scanning
+    - uv audit             # Package vulnerability audit

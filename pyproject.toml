@@ -1,0 +1,4 @@
+[tool.pytest.ini_options]
+# ... (any existing settings you already had here, like plugins or markers) ...
+norecursedirs = ["builds", ".git", "__pycache__"]
+testpaths = ["tests"]
