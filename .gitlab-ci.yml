@@ -1,0 +1,19 @@
+stages:
+  - test
+
+test:
+  stage: test
+  image: python:3.11
+
+  before_script:
+    - pip install -r requirements.txt
+    - pip install ruff black mypy pytest vulture bandit pip-audit
+
+  script:
+    - ruff check .
+    - black --check .
+    - mypy .
+    - pytest
+    - vulture app.py ingest.py rag_chat.py query_cli.py
+    - bandit app.py ingest.py rag_chat.py query_cli.py
+    - pip-audit
