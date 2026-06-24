@@ -3,13 +3,9 @@ import fitz  # PyMuPDF
 
 st.title("Local RAG - PDF Question Answering System")
 
-uploaded_file = st.file_uploader(
-    "Upload a PDF",
-    type=["pdf"]
-)
+uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
 
 if uploaded_file is not None:
-
     pdf_text = ""
 
     pdf = fitz.open(stream=uploaded_file.read(), filetype="pdf")
@@ -22,7 +18,6 @@ if uploaded_file is not None:
     question = st.text_input("Ask a question about the PDF")
 
     if question:
-
         question_words = question.lower().split()
 
         matches = []

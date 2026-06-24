@@ -7,7 +7,7 @@ packages = [
     ("llama_cpp", "Llama.cpp"),
     ("langchain", "LangChain"),
     ("langchain_community", "LangChain Community"),
-    ("streamlit", "Streamlit")
+    ("streamlit", "Streamlit"),
 ]
 
 for module_name, display_name in packages:
