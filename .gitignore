@@ -1,15 +1,23 @@
-<<<<<<< HEAD
-```text
+# Environments & Virtual Environments
 venv/
-.streamlit/
-__pycache__/
+.venv/
+env/
 
-=======
-venv/
+# Python caching
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Application Specific
+.streamlit/
 uploads/
 vectorstore/
-.env
->>>>>>> a91d2ec9aa862b9f33df52a9627634531a132835
 models/
+builds/
+
+# Environmental variables / Secrets
+.env
